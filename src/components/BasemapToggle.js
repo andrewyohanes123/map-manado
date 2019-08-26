@@ -22,8 +22,9 @@ export default class BasemapToggle extends Component {
                 if (activeBasemaps.findIndex(x => x === b.name) > -1) {
                   b.hide()
                   updateBasemaps(activeBasemaps.filter(a => a !== b.name))
-                } else {
+                } else {                  
                   b.show()
+                  b.setOpacity(0.5)
                   activeBasemaps.push(b.name);
                   updateBasemaps(activeBasemaps)
                 }

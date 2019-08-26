@@ -61,7 +61,9 @@ class App extends Component {
 
   showBaseMap = zoom => {
     const { basemaps, activeBasemaps } = this.state;
+    activeBasemaps.length = 0;
     basemaps.map(b => {
+      b.setOpacity(0.5)
       if (b.name === 'Bangunan' && zoom > 15) {
         b.show()
         if (activeBasemaps.findIndex(x => x === 'Bangunan') === -1) activeBasemaps.push('Bangunan');
@@ -145,6 +147,7 @@ class App extends Component {
       if (b.name === 'Jalan' || b.name === 'Sungai') {
         b.show()
       }
+      b.setOpacity(0.5)
     })
     this.getDistricts();
   }
