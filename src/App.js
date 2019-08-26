@@ -171,8 +171,8 @@ class App extends Component {
         <div className="logo">
           <img src={require('./components/logo.png')} alt="" />
         </div>
-        <div id="App" style={{ position: 'absolute', top: 0, left: 0, width: '100vw', height: '100vh' }}></div>        
-        { this.state.type.length > 0 && Object.keys(this.state.data).length > 0 && <FloatWindow onClick={this.clearData} data={this.state.data} type={this.state.type} />}
+        <div id="App" style={{ position: 'absolute', top: 0, left: 0, width: '100vw', height: '100vh' }}></div>
+        {this.state.type.length > 0 && Object.keys(this.state.data).length > 0 && <FloatWindow onClick={this.clearData} data={this.state.data} type={this.state.type} />}
         <Container fluid>
           <Row className="justify-content-end text-light">
             {!this.state.sidebar &&
@@ -204,6 +204,9 @@ class App extends Component {
                 ))}
               </select>
               <hr />
+              <Button color="light" size="sm" onClick={() => {
+                this.setState({ district : '' }, () => this.state.geo.clearFocuses());
+              }}>Reset</Button>
               {this.state.subdistricts.length === 0 && this.state.districts.map(d => (<Card onClick={() => {
                 this.setState({ district: d.id })
                 d.focus()
@@ -219,7 +222,7 @@ class App extends Component {
                     <>
                       <div className="d-flex justify-content-between align-items-center">
                         <Button color="light" size="sm" onClick={() => {
-                          this.state.geo.clearFocuses();
+                          this.setState({ district: '' }, () => this.state.geo.clearFocuses());
                           // this.state.subdistricts[0].district.focus()
                           this.setState({ subdistricts: [], subdistrict: '' })
                         }}>Kembali</Button>
@@ -261,7 +264,7 @@ class App extends Component {
               }
             </Col>}
           </Row>
-        </Container>        
+        </Container>
         {/* {
           this.state.type.length > 0 && Object.keys(this.state.data).length > 0 &&
           <ModalWindow type={this.state.type} onClick={this.clearData} data={this.state.data} />
