@@ -6,6 +6,7 @@ import axios from 'axios';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import BasemapToggle from './components/BasemapToggle';
+import FloatWindow from './components/FloatWindow';
 
 class App extends Component {
   state = {
@@ -170,15 +171,16 @@ class App extends Component {
         <div className="logo">
           <img src={require('./components/logo.png')} alt="" />
         </div>
-        <div id="App" style={{ position: 'absolute', top: 0, left: 0, width: '100vw', height: '100vh' }}></div>
+        <div id="App" style={{ position: 'absolute', top: 0, left: 0, width: '100vw', height: '100vh' }}></div>        
+        { this.state.type.length > 0 && Object.keys(this.state.data).length > 0 && <FloatWindow onClick={this.clearData} data={this.state.data} type={this.state.type} />}
         <Container fluid>
-          <Row className="justify-content-end text-light vh-100">
+          <Row className="justify-content-end text-light">
             {!this.state.sidebar &&
               <Col md="3" className="text-right p-2">
                 <Button color="dark" size="sm" onClick={() => this.setState({ sidebar: true })}>Sidebar</Button>
               </Col>
             }
-            {this.state.sidebar && <Col md="3" style={{ background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)', overflow: 'auto', height: '100vh' }}>
+            {this.state.sidebar && <Col md="3" className="vh-100" style={{ background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)', overflow: 'auto', height: '100vh' }}>
               {/* <ul className="text-left">
                 {this.state.basemaps.map(bmap => (<li key={bmap.id}>
                   <input type="checkbox" onClick={(e) => this.click(e, bmap)} id="" />&nbsp;
@@ -259,11 +261,11 @@ class App extends Component {
               }
             </Col>}
           </Row>
-        </Container>
-        {
+        </Container>        
+        {/* {
           this.state.type.length > 0 && Object.keys(this.state.data).length > 0 &&
           <ModalWindow type={this.state.type} onClick={this.clearData} data={this.state.data} />
-        }
+        } */}
       </div>
     );
   }
