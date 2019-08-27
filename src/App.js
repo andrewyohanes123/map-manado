@@ -44,12 +44,42 @@ class App extends Component {
     styles = Object.keys(GeoMan.Styles);
     this.setState({ geo, styles }, this.getBasemaps);
     geo.setRegionLabelEvent('click', 'district', ev => {
-      this.setState({ type: 'kec', data: ev.properties })
+      const {districts} = this.state;
+      const {properties:data} = ev;
+      districts.forEach(d => {
+        if (d.name === data.name) {
+          this.setState({ district : d.id })
+          d.focus()
+        }
+      })
+      this.setState({ type: 'kec', data })
     })
     geo.setRegionLabelEvent('click', 'subdistrict', ev => {
+      const {districts} = this.state;
+      const {properties:data} = ev;
+      districts.forEach(async d => {
+        if (d.name === data.district) {
+          let subdistricts = await d.getSubdistricts()
+          this.setState({ district : data.district_id, subdistrict : data.id, subdistricts })
+          subdistricts = subdistricts.filter(s => s.name === data.name)[0]
+          subdistricts.focus()
+        }
+      })
       this.setState({ type: 'kel', data: ev.properties })
     })
     geo.setRegionLabelEvent('click', 'neighbor', ev => {
+      const {districts} = this.state;
+      const {properties:data} = ev;
+      districts.forEach(async d => {
+        if (d.name === data.district) {
+          let subdistricts = await d.getSubdistricts()
+          let subdistrict = subdistricts.filter(s => s.name === data.subdistrict)[0]
+          let neighbors = await subdistrict.getNeighbors()
+          let neighbor = neighbors.filter(n => n.name === data.name)[0]
+          neighbor.focus()
+          this.setState({ district : data.district_id, subdistrict : data.id, subdistricts, neighbor : neighbor.id, neighbors })
+        }
+      })
       this.setState({ type: 'rw', data: ev.properties })
     })
     geo.map.on('zoom', e => {
@@ -60,10 +90,11 @@ class App extends Component {
   }
 
   showBaseMap = zoom => {
-    const { basemaps, activeBasemaps } = this.state;
-    activeBasemaps.length = 0;
-    basemaps.map(b => {
-      b.setOpacity(0.5)
+    let { basemaps, activeBasemaps } = this.state;
+    activeBasemaps = activeBasemaps.filter(a => a !== 'Jalan');
+    activeBasemaps = activeBasemaps.filter(a => a !== 'Bangunan');
+    activeBasemaps = activeBasemaps.filter(a => a !== 'Sungai');
+    basemaps.map(b => {      
       if (b.name === 'Bangunan' && zoom > 15) {
         b.show()
         if (activeBasemaps.findIndex(x => x === 'Bangunan') === -1) activeBasemaps.push('Bangunan');
@@ -88,9 +119,11 @@ class App extends Component {
           this.setState({ activeBasemaps: a });
         }
 
-        b.hide()
+        if (b.name === 'Sungai' || b.name === 'Jalan' || b.name === 'Bangunan') {
+          b.hide()
+        }
       }
-
+            
 
       if (b.name === 'Jalan' && zoom > 14.25) {
         b.show()
@@ -112,6 +145,7 @@ class App extends Component {
         //   const a = activeBasemaps.filter(b => b !== 'Jalan');
         //   this.setState({ activeBasemaps : a });
       }
+      b.setOpacity(1)
     })
   }
 
@@ -147,7 +181,7 @@ class App extends Component {
       if (b.name === 'Jalan' || b.name === 'Sungai') {
         b.show()
       }
-      b.setOpacity(0.5)
+      b.setOpacity(1)
     })
     this.getDistricts();
   }

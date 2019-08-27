@@ -61,7 +61,7 @@
   position: fixed;
   z-index: 120;
   left: 0;
-  top : 25%;
+  top : 25%;  
   transform: translateY(-25%);
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
@@ -70,6 +70,11 @@
   border-top-right-radius: 0.5em;
   color : white;
   cursor: pointer;
+}
+
+.basemap-wrapper {
+  max-height: 450px !important;
+  overflow: auto;
 }
 
 @keyframes App-logo-spin {

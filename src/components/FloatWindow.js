@@ -64,8 +64,13 @@ export default class FloatWindow extends Component {
         this.setState({ type: ev.target.value }, this.getData);
     }
 
-    getData = () => {
-        const { type, data } = this.props;
+    componentWillReceiveProps = (p) => {
+        console.log(p)
+        this.getData(p)
+    }
+
+    getData = (p) => {
+        const { type, data } = typeof p === 'undefined' ? this.props : p;
         const { type: t, types } = this.state;
         const params = {
             region: this.props.type,
@@ -166,7 +171,7 @@ export default class FloatWindow extends Component {
                                     <option key={i} value={t}>{t}</option>
                                 ))}
                             </select>
-                            {type !== 'Pekerjaan' && <Doughnut data={dataset} width="100%" height="100%" />}
+                            {type !== 'Pekerjaan' && <Doughnut data={dataset} width={100} height={100} />}
                             {type === 'Pekerjaan' && <HorizontalBar options={{
                                 legend: { display: false }
                             }} data={dataset} width="100%" height="100%" />}
