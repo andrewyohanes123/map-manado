@@ -65,7 +65,6 @@ export default class FloatWindow extends Component {
     }
 
     componentWillReceiveProps = (p) => {
-        console.log(p)
         this.getData(p)
     }
 
@@ -129,11 +128,12 @@ export default class FloatWindow extends Component {
                     ]
                 }
 
+                console.log(data)
+
                 datasets[0].data = data.map(g => {
                     return g.TOTAL
                 })
                 labels = data.map(g => {
-                    console.log(g[types[t]])
                     return (g[types[t].toUpperCase()])
                 })
                 this.setState({ data, dataset: { datasets, labels }, });
@@ -152,6 +152,7 @@ export default class FloatWindow extends Component {
                     <Card style={{
                         background: 'rgba(255,255,255,0.5)',
                         backdropFilter: 'blur(10px)',
+                        WebkitBackdropFilter : 'blur(10px)'
                     }} className="border-0 shadow text-left">
                         <CardBody className="p-2">
                             <div className="d-flex justify-content-between align-items-center">

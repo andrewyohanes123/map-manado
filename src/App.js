@@ -44,6 +44,8 @@ class App extends Component {
     styles = Object.keys(GeoMan.Styles);
     this.setState({ geo, styles }, this.getBasemaps);
     geo.setRegionLabelEvent('click', 'district', ev => {
+      this.ping();
+      this.setState({ district : '', subdistrict : '', subdistricts : [], neighbors : [], neighbor : '' });
       const {districts} = this.state;
       const {properties:data} = ev;
       districts.forEach(d => {
@@ -55,6 +57,8 @@ class App extends Component {
       this.setState({ type: 'kec', data })
     })
     geo.setRegionLabelEvent('click', 'subdistrict', ev => {
+      this.ping();
+      this.setState({ district : '', subdistrict : '', subdistricts : [], neighbors : [], neighbor : '' });
       const {districts} = this.state;
       const {properties:data} = ev;
       districts.forEach(async d => {
@@ -68,6 +72,8 @@ class App extends Component {
       this.setState({ type: 'kel', data: ev.properties })
     })
     geo.setRegionLabelEvent('click', 'neighbor', ev => {
+      this.ping();
+      this.setState({ district : '', subdistrict : '', subdistricts : [], neighbors : [], neighbor : '' });
       const {districts} = this.state;
       const {properties:data} = ev;
       districts.forEach(async d => {
@@ -129,23 +135,7 @@ class App extends Component {
         b.show()
         if (activeBasemaps.findIndex(x => x === 'Jalan') === -1) activeBasemaps.push('Jalan');
         this.setState({ activeBasemaps });
-        // } else if (zoom > 13 && zoom <= 15 && activeBasemaps.findIndex(x => x === 'Bangunan') > -1) {
-        //   b.hide()
-        //   console.log('bangunan')
-        //   const a = activeBasemaps.filter(b => b !== 'Bangunan');
-        //   this.setState({ activeBasemaps : a });
-        // } else if (zoom > 14 && zoom <= 14.25 && activeBasemaps.findIndex(x => x === 'Sungai') > -1) {
-        //   b.hide()
-        //   console.log('sungai')
-        //   const a = activeBasemaps.filter(b => b !== 'Sungai');
-        //   this.setState({ activeBasemaps : a });
-        // } else if (zoom > 13 && zoom <= 14 && activeBasemaps.findIndex(x => x === 'Jalan') > -1) {
-        //   b.hide()
-        //   console.log('Jalan')
-        //   const a = activeBasemaps.filter(b => b !== 'Jalan');
-        //   this.setState({ activeBasemaps : a });
       }
-      b.setOpacity(1)
     })
   }
 
@@ -181,7 +171,6 @@ class App extends Component {
       if (b.name === 'Jalan' || b.name === 'Sungai') {
         b.show()
       }
-      b.setOpacity(1)
     })
     this.getDistricts();
   }
@@ -242,8 +231,8 @@ class App extends Component {
               </select>
               <hr />
               <Button color="light" size="sm" onClick={() => {
-                this.setState({ district : '' }, () => this.state.geo.clearFocuses());
-              }}>Reset</Button>
+                this.setState({ district : '', subdistrict : '', neighbor : '', neighbors: [], subdistricts : [] }, () => this.state.geo.clearFocuses());
+              }}>Manado</Button>
               {this.state.subdistricts.length === 0 && this.state.districts.map(d => (<Card onClick={() => {
                 this.setState({ district: d.id })
                 d.focus()
