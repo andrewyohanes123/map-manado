@@ -31,7 +31,7 @@ class App extends Component {
   componentDidMount() {
     let { geo, styles, style } = this.state;
     // eslint-disable-next-line no-undef
-    geo = new GeoMan('http://10.71.71.71', 8080, {
+    geo = new GeoMan('http://10.71.71.198', 8080, {
       container: 'App',
       center: [
         124.842624,
